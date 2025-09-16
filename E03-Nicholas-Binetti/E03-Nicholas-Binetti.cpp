@@ -1,30 +1,62 @@
 #include <GL/freeglut.h> //include glut for Windows
 
+//width and height for window size
+int width = 400;
+int height = 400;
+
 // called when the GL context need to be rendered
 void display(void)
 {
     // clear the screen to white, which is the background color
     glClearColor(1.0, 1.0, 1.0, 0.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glColor3f(1.0f, 0.0f, 0.0f); // red
+    glBegin(GL_TRIANGLES);
+    glVertex2f(-0.5f, 0.5f);   // left
+    glVertex2f(0.5f, 0.5f);    // right
+    glVertex2f(0.0f, -0.5f);   // bottom
     glEnd();
+
+    glutSwapBuffers();
+}
+
+// called when window is first created or when window is resized
+void reshape(int w, int h)
+{
+    width = w;
+    height = h;
+
+    glViewport(0, 0, width, height);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    float scale = (float)w / (float)h;
+
+    if (scale >= 1.0f) {
+        // Window is wider than tall
+        gluOrtho2D(-scale, scale, -1.0, 1.0);
+    }
+    else {
+        // Window is taller than wide
+        gluOrtho2D(-1.0, 1.0, -1.0f / scale, 1.0f / scale);
+    }
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 }
 
 int main(int argc, char* argv[])
 {
-    //initialize GLUT, let it extract command-line GLUT options that you may provide
-    //NOTE that the '&' before argc
     glutInit(&argc, argv);
-
-    // specify as double bufferred can make the display faster
-    // Color is speicfied to RGBA, four color channels with Red, Green, Blue and Alpha(depth)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+    glutInitWindowSize(width, height);
+    glutCreateWindow("First Triangle");
 
-    //set the initial window size */
-    glutInitWindowSize(640, 480);
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
 
-    // create the window with a title
-    glutCreateWindow("First OpenGL Program");
-
-    //start the glut main loop
     glutMainLoop();
-
     return 0;
+}
