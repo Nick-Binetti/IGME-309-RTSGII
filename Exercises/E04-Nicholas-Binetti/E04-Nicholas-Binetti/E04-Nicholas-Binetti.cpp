@@ -145,6 +145,7 @@ void update()
 	/***********************************************************/
 	// Calculate velocity_y with gravitational acceleration.
 	// write the code below
+	//if ball is above bar apply gravity(scaled by deltaTime) to it
 	if (ballPos[1] - radius > barPos[1])
 	{
 		velocity_y += -9.8 * deltaTime;
@@ -164,10 +165,15 @@ void update()
 		// Incorporate collision detection to ascertain when the ball makes contact with the bar.
 		// Upon collision, modify the ball's trajectory by adjusting its velocity, ensuring it bounces back.
 		// write the code below
-		// **** X axis COllision ****
-		if (ballPos[1] - radius <= barPos[1])
+		//if the ball is between the bar's bounds...
+		if (ballPos[0] - radius > barPos[0] - barSize/2 && ballPos[0] - radius < barPos[0] + barSize/2)
 		{
-			velocity_y = abs(velocity_y);
+			//and if the ball hits(or is below) the bar
+			if (ballPos[1] - radius <= barPos[1])
+			{
+				//apply the same, but positive, velocity to the ball
+				velocity_y = abs(velocity_y);
+			}
 		}
 		// write the code above
 		/***********************************************************/
