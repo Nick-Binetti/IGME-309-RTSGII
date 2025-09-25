@@ -1,8 +1,8 @@
 #include <GL/freeglut.h> //include glut for Windows
 
 //width and height for window size
-int width = 400;
-int height = 400;
+int screenWidth = 400;
+int screenHeight = 400;
 
 // called when the GL context need to be rendered
 void display(void)
@@ -24,10 +24,10 @@ void display(void)
 // called when window is first created or when window is resized
 void reshape(int w, int h)
 {
-    width = w;
-    height = h;
+    screenWidth = w;
+    screenHeight = h;
 
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, screenWidth, screenHeight);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-    glutInitWindowSize(width, height);
+    glutInitWindowSize(screenWidth, screenHeight);
     glutCreateWindow("First Triangle");
 
     glutDisplayFunc(display);
