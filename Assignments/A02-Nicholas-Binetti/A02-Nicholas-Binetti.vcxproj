@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="interactiveTriangle.cpp" />
+    <ClCompile Include="PolyObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PolyObject.h" />

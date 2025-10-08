@@ -6,25 +6,24 @@
 #endif
 
 #include <iostream>
+
+#include "PolyObject.h"
+
 using namespace std;
+
+std::vector<PolyObject> completedPolygons;
+PolyObject currentPolygon;
+
 
 float canvasSize[] = {10.0f, 10.0f};
 int rasterSize[] = {800, 600};
-
-// structure for storing 3 2D vertices of a triangle
-int numOfVertices = 0;
-float v[2*3];
-float color[3];
 
 float mousePos[2];
 
 void init(void)
 {
-    for(int i=0; i<6; i++)
-        v[i] = 0.0f;
+    //initialize mousePos values
     mousePos[0] = mousePos[1] = 0.0f;
-    color[0] =1.0f;
-    color[1] = color[2] = 0.0f;
 }
 
 void drawCursor()
@@ -42,24 +41,17 @@ void display(void)
     glClearColor(1.0, 1.0, 1.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    glColor3fv(color);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
-    if(numOfVertices> 0 && numOfVertices<3) {
-        
-        glBegin(GL_LINE_STRIP);
-        for(int i=0; i<numOfVertices; i++)
-            glVertex2fv(v+i*2);
-        glVertex2fv(mousePos);
-        glEnd();
+   
+    //draw all completed polygons in the vector
+    for (PolyObject p : completedPolygons)
+    {
+        p.draw();
     }
-    else if(numOfVertices == 3) {
-        glBegin(GL_TRIANGLES);
-        for(int i=0; i<numOfVertices; i++)
-            glVertex2fv(v+i*2);
-        glEnd();
-    }
+
+    //draw incomplete/current polygon
+    currentPolygon.draw(mousePos[0], mousePos[1]);
     
     drawCursor();
     glutSwapBuffers();
@@ -81,15 +73,13 @@ void reshape(int w, int h)
 void mouse (int button, int state, int x, int y)
 {
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        if(numOfVertices>=3)
-            numOfVertices=0;
-        
+
         mousePos[0] = (float)x / rasterSize[0] * canvasSize[0];
         mousePos[1] = (float)(rasterSize[1] - y) / rasterSize[1] * canvasSize[1];
-        v[numOfVertices*2+0] = mousePos[0];
-        v[numOfVertices*2+1] = mousePos[1];
-        
-        numOfVertices++;
+
+        //add vertex @ current mouse position to current polygon
+        currentPolygon.addVertex(mousePos[0], mousePos[1]);
+
         glutPostRedisplay();
     }
 }
@@ -107,8 +97,18 @@ void motion(int x, int y)
 void keyboard(unsigned char key, int x, int y)
 {
     switch(key){
+        //esc press
         case 27:
             exit(0);
+            break;
+
+        //enter press -> complete current polygon
+        case 13:
+            if (currentPolygon.getVertNum() > 0)
+            {
+                completedPolygons.push_back(currentPolygon);
+                currentPolygon = PolyObject(); // new empty polygon
+            }
             break;
     }
 }
@@ -117,29 +117,32 @@ void menu(int value)
 {
     switch (value) {
         case 0: // clear
-            numOfVertices = 0;
+            completedPolygons.clear();
             glutPostRedisplay();
             break;
+
         case 1: //exit
             exit(0);
+
         case 2: // red
-            color[0] = 1.0f;
-            color[1] = 0.0f;
-            color[2] = 0.0f;
+            currentPolygon.setColor(1.0f, 0.0f, 0.0f);
             glutPostRedisplay();
             break;
+
         case 3: // green
-            color[0] = 0.0f;
-            color[1] = 1.0f;
-            color[2] = 0.0f;
+            currentPolygon.setColor(0.0f, 1.0f, 0.0f);
             glutPostRedisplay();
             break;
+
         case 4: // blue
-            color[0] = 0.0f;
-            color[1] = 0.0f;
-            color[2] = 1.0f;
+            currentPolygon.setColor(0.0f, 0.0f, 1.0f);
             glutPostRedisplay();
             break;
+
+        case 5: // black
+            currentPolygon.setColor(0.0f, 0.0f, 0.0f);
+            glutPostRedisplay();
+
         default:
             break;
     }
@@ -150,6 +153,7 @@ void createMenu()
     glutAddMenuEntry("Red", 2);
     glutAddMenuEntry("Green", 3);
     glutAddMenuEntry("Blue", 4);
+    glutAddMenuEntry("Black", 5);
     
     glutCreateMenu(menu);
     glutAddMenuEntry("Clear", 0);
@@ -164,7 +168,7 @@ int main(int argc, char *argv[])
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(rasterSize[0], rasterSize[1]);
-    glutCreateWindow("Mouse Event - draw a triangle");
+    glutCreateWindow("Polygon Creation Tool(PCT)");
     
     glutReshapeFunc(reshape);
     glutDisplayFunc(display);
