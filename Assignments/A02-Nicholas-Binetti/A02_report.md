@@ -1,0 +1,2 @@
+# Assignment 2 Implementation 
+In this assignment I implemented the PolyObject class, including a draw method for completed polygons and one for in progress polygons. The draw method changed the drawing type from a point to a line to a polygon, depending on the number of vertices returned from getVertNum(). I used the InteractiveTriangle.cpp file as a base for mouse interaction and the menuing system. There weren't any requirements I couldn't complete other than the extra credit portion. 

@@ -42,32 +42,39 @@ void ParticleSystem::update(float deltaTime)
 		/***************************/
 		// Write your code below
 		// Update lifetime, velocity, position, and color.
+
+		int posIndex = i * 3;
+		int colIndex = i * 4;
 		
 		lifeTimes[i] += deltaTime;
+		
+		velocities[posIndex+1] += acceleration[1] * deltaTime; //only affect y velocity(down)
 
-		//update velocity(grav & deltaTime), position(velocities), and color(ratio of cur vals in lifeTimes to maxLifeTime)
-		// 		
+		positions[posIndex] += velocities[posIndex] * deltaTime; //x pos
+		positions[posIndex+1] += velocities[posIndex+1] * deltaTime; //y pos
+		positions[posIndex+2] += velocities[posIndex+2] * deltaTime; //z pos
+
+		colors[colIndex + 3] = 1.0f- lifeTimes[i] / maxLifeTime; 
 
 		// Reset particle states (positions, velocities, colors, and lifetimes) when the lifetime reaches the maxLifeTime
 		if (lifeTimes[i] > maxLifeTime)
 		{
 			//reset everything
-			positions[i] = 0.0f; // x
-			positions[i + 1] = 0.0f; // y
-			positions[i + 2] = 0.0f; // z
+			positions[posIndex] = 0.0f; // x
+			positions[posIndex + 1] = 0.0f; // y
+			positions[posIndex + 2] = 0.0f; // z
 
-			velocities[i] = getRandomValue(minSpeedX, maxSpeedX);
-			velocities[i + 1] = getRandomValue(minSpeedY, maxSpeedY);
-			velocities[i + 2] = getRandomValue(minSpeedZ, maxSpeedZ);
+			velocities[posIndex] = getRandomValue(minSpeedX, maxSpeedX);
+			velocities[posIndex + 1] = getRandomValue(minSpeedY, maxSpeedY);
+			velocities[posIndex + 2] = getRandomValue(minSpeedZ, maxSpeedZ);
 
-			colors[i] = 0.0f; //r
-			colors[i + 1] = 0.0f; // g
-			colors[i + 2] = 1.0f; // b
-			colors[i + 3] = 1.0f; // a
+			colors[colIndex] = 0.0f; //r
+			colors[colIndex + 1] = 0.0f; // g
+			colors[colIndex + 2] = 1.0f; // b
+			colors[colIndex + 3] = 1.0f; // a
 
-			lifeTimes[i] = maxLifeTime - maxLifeTime * i / numParticles;
+			lifeTimes[i] = 0.0f;
 		}
-		
 		// Write your code above
 		/***************************/
 	}
@@ -78,7 +85,18 @@ void ParticleSystem::draw()
 	/***************************/
 	// Write your code below
 	// Use GL_POINTS for rendering
-	
+		glPointSize(3.0f);
+
+		glBegin(GL_POINTS);
+
+		for (int i = 0; i < numParticles; i++) {
+			int posIndex = i * 3;
+			int colIndex = i * 4;
+
+			glColor4f(colors[colIndex], colors[colIndex + 1], colors[colIndex + 2], colors[colIndex + 3]);
+			glVertex3f(positions[posIndex], positions[posIndex + 1], positions[posIndex + 2]);
+		}
+		glEnd();
 	// Write your code above
 	/***************************/
 }
