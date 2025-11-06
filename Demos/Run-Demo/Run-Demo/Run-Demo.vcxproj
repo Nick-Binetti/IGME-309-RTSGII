@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\w11_sample_code\demo_bv_practice.cpp" />
+    <ClCompile Include="..\..\w11_sample_code\demo_bv_hierarchy_practice.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
