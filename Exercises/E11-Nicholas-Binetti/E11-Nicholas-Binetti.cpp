@@ -29,7 +29,7 @@ std::vector<HermiteSegment> segments = {
     {{10, 8, 4}, {4, 12, 8}, {-6, 4, 4}, {-6, 4, 4}},
     {{4, 12, 8}, {-2, 10, 4}, {-6, -2, -4}, {-6, -2, -4}},
     {{-2, 10, 4}, {-4, 4, 0}, {0, -6, -4}, {0, -6, -4}},
-    {{-4, 4, 0}, {0, 0, 0}, {6, -4, 0}, {6, -4, 0}}};
+    {{-4, 4, 0}, {0, 0, 0}, {6, -4, 0}, {6, -4, 0}} };
 
 // Animation parameters
 float animTime = 0.0f;
@@ -43,7 +43,7 @@ float camAngleY = 45.0f;
 float camDistance = 25.0f;
 
 // Calculate point on Hermite curve segment
-Point3D hermitePoint(const HermiteSegment &seg, float t)
+Point3D hermitePoint(const HermiteSegment& seg, float t)
 {
     Point3D p;
     p.x = h1(t) * seg.p0.x + h2(t) * seg.p1.x + h3(t) * seg.t0.x + h4(t) * seg.t1.x;
@@ -64,12 +64,13 @@ Point3D getLoopPoint(float t)
 
 // ****************************************************************
 // Write your code here.
-// Add functions for the cubic Bezier function.
-Point3D cubicBezier(float t, float p0, float p1, float p2, float p3, float animTime)
+// Cubic Bezier easing function
+float cubicBezierEase(float t, float x1, float y1, float x2, float y2, float animTime)
 {
     float u = 1.0f - t;
-    return u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
+    return (3 * u * u * t * y1 + 3 * u * t * t * y2 + t * t * t)*animTime;
 }
+
 
 // ****************************************************************
 
@@ -78,7 +79,7 @@ void initCurve()
 {
     curvePoints.clear();
     int pointsPerSegment = 50;
-    for (const auto &seg : segments)
+    for (const auto& seg : segments)
     {
         for (int i = 0; i <= pointsPerSegment; i++)
         {
@@ -98,9 +99,9 @@ void init()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    GLfloat lightPos[] = {5.0f, 5.0f, 5.0f, 1.0f};
-    GLfloat lightAmb[] = {0.3f, 0.3f, 0.3f, 1.0f};
-    GLfloat lightDiff[] = {0.8f, 0.8f, 0.8f, 1.0f};
+    GLfloat lightPos[] = { 5.0f, 5.0f, 5.0f, 1.0f };
+    GLfloat lightAmb[] = { 0.3f, 0.3f, 0.3f, 1.0f };
+    GLfloat lightDiff[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
@@ -122,7 +123,7 @@ void drawCurve()
     glLineWidth(3.0f);
 
     glBegin(GL_LINE_STRIP);
-    for (const auto &p : curvePoints)
+    for (const auto& p : curvePoints)
     {
         glVertex3f(p.x, p.y, p.z);
     }
@@ -159,10 +160,10 @@ void display()
 
     // Set up camera
     gluLookAt(camDistance * cos(camAngleY * M_PI / 180) * cos(camAngleX * M_PI / 180),
-              camDistance * sin(camAngleX * M_PI / 180),
-              camDistance * sin(camAngleY * M_PI / 180) * cos(camAngleX * M_PI / 180),
-              3.0, 6.0, 4.0,
-              0, 1, 0);
+        camDistance * sin(camAngleX * M_PI / 180),
+        camDistance * sin(camAngleY * M_PI / 180) * cos(camAngleX * M_PI / 180),
+        3.0, 6.0, 4.0,
+        0, 1, 0);
 
     drawAxes();
     drawCurve();
@@ -177,8 +178,10 @@ void display()
     // 2. apply necessary changes on t.
     if (useEasing)
     {
-        
+        // Ease-in
+        t = cubicBezierEase(t, 0.42f, 0.0f, 0.58f, 1.0, animTime);
     }
+
 
     // ****************************************************************
     Point3D boxPos = getLoopPoint(t);
@@ -252,7 +255,7 @@ void specialKeys(int key, int x, int y)
     glutPostRedisplay();
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
