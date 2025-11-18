@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\w12_sample_code\bezier_transform_practice.cpp" />
+    <ClCompile Include="..\..\w13_sample_code\shader_bare_bone.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
