@@ -18,23 +18,11 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\w15_sample_code\SampleCode\cone.h" />
-    <ClInclude Include="..\..\w15_sample_code\SampleCode\cube.h" />
-    <ClInclude Include="..\..\w15_sample_code\SampleCode\duck.h" />
-    <ClInclude Include="..\..\w15_sample_code\SampleCode\object.h" />
-    <ClInclude Include="..\..\w15_sample_code\SampleCode\sphere.h" />
-    <ClInclude Include="..\..\w15_sample_code\SampleCode\teapot.h" />
-    <ClInclude Include="..\..\w15_sample_code\SampleCode\torus.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\w15_sample_code\SampleCode\main.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{77ba7298-3e1c-4654-9fb0-705f5168bcce}</ProjectGuid>
-    <RootNamespace>RunDemo</RootNamespace>
+    <ProjectGuid>{05f33039-438f-40cb-8d62-737e32c682da}</ProjectGuid>
+    <RootNamespace>FinalProjectPhase2NicholasBinetti</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -114,13 +102,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)/MyLib/include.</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/MyLib/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)/MyLib/lib/x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;freeglut.lib.;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -137,6 +125,13 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Demos\w15_sample_code\SampleCode\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Demos\w15_sample_code\SampleCode\cube.h" />
+    <ClInclude Include="..\..\Demos\w15_sample_code\SampleCode\sphere.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
